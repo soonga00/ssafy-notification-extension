@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "급식 알림 확장",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["notifications", "alarms", "tabs"]
+}
