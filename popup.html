@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>급식 알림 확장</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="meals.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSAFFY 급식 & 바로가기</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="meals.js"></script>
+    <!-- Inter font for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <section class="meals-section">
-    <h2>오늘의 메뉴</h2>
-    <div class="meals-grid">
-      <!-- meals.js에서 오늘 메뉴가 동적으로 추가됨 -->
+    <div class="container">
+        <header class="header">
+            <h1>오늘의 급식</h1>
+        </header>
+
+        <section class="meals-section">
+            <div class="meals-grid">
+                <!-- meals.js에서 오늘 메뉴가 동적으로 추가됨 -->
+            </div>
+            <div id="no-meal-message" class="no-meal-message" style="display: none;">
+                <p>오늘은 급식 정보가 없습니다.</p>
+                <p>즐거운 하루 되세요!</p>
+            </div>
+        </section>
+
+        <section class="shortcut-section">
+            <h2 class="section-title">바로가기</h2>
+            <div class="shortcut-grid">
+                <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">edussafy</a>
+                <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">swea</a>
+                <a href="https://lab.ssafy.com/" target="_blank" class="shortcut-card">ssafyGit</a>
+                <button class="add-shortcut" aria-label="바로가기 추가">+</button>
+            </div>
+        </section>
     </div>
-  </section>
-  <section class="shortcut-section">
-    <h2>바로가기</h2>
-    <div class="shortcut-grid">
-      <div class="shortcut-card">edussafy</div>
-      <div class="shortcut-card">swea</div>
-      <div class="shortcut-card">ssafyGit</div>
-      <button class="add-shortcut">+</button>
-    </div>
-  </section>
+</body>
+</html>
