@@ -6,15 +6,45 @@
     <title>SSAFFY 급식 & 바로가기</title>
     <link rel="stylesheet" href="style.css">
     <script src="meals.js"></script>
+    <script src="popup.js"></script>
     <!-- Inter font for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>오늘의 급식</h1>
+        <section class="shortcut-section">
+            <header class="header">
+            <h1>🔗 바로 가기</h1>
         </header>
-
+                        <!-- ...existing code... -->
+            <div class="shortcut-grid">
+            <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">Edu SSAFY</a>
+            <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">SWEA</a>
+            <a href="https://project.ssafy.com/home" target="_blank" class="shortcut-card">SSAFY Git</a>
+            <div id="shortcut-form" style="display:none; margin-top:10px;">
+                <input type="text" id="shortcut-title" placeholder="이름" style="width:40%;" />
+                <input type="url" id="shortcut-url" placeholder="링크" style="width:50%;" />
+                <button id="add-shortcut-btn">추가</button>
+            </div>
+            <!-- + 버튼은 JS에서 동적으로 추가됨 -->
+            </div>
+            <div id="shortcut-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>바로가기 추가</h3>
+    <input type="text" id="modal-shortcut-title" placeholder="이름" />
+    <input type="url" id="modal-shortcut-url" placeholder="링크" />
+    <div class="modal-btns">
+      <button id="modal-add-btn">추가</button>
+      <button id="modal-cancel-btn">취소</button>
+    </div>
+  </div>
+</div>
+            <!-- ...existing code... -->
+        </section>
+        <header class="header">
+            <h1>🍽️ 오늘의 급식 🍽️</h1>
+        </header>
+ 
         <section class="meals-section">
             <div class="meals-grid">
                 <!-- meals.js에서 오늘 메뉴가 동적으로 추가됨 -->
@@ -25,15 +55,7 @@
             </div>
         </section>
 
-        <section class="shortcut-section">
-            <h2 class="section-title">바로가기</h2>
-            <div class="shortcut-grid">
-                <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">edussafy</a>
-                <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">swea</a>
-                <a href="https://lab.ssafy.com/" target="_blank" class="shortcut-card">ssafyGit</a>
-                <button class="add-shortcut" aria-label="바로가기 추가">+</button>
-            </div>
-        </section>
+        
     </div>
 </body>
 </html>

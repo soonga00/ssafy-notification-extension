@@ -1,11 +1,11 @@
 /* General Body Styles */
 body {
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif; /* Using Inter for a modern feel */
+    font-family: 'Segoe UI', Arial, sans-serif; /* Using Inter for a modern feel */
     background: linear-gradient(135deg, #e0f2f7 0%, #c4e4f2 100%); /* Soft blue gradient */
     color: #2c3e50; /* Dark blue-grey for text */
     margin: 0;
     padding: 20px;
-    width: 600px; /* Fixed width for extension */
+    width: 500px; /* Fixed width for extension */
     min-height: 600px;
     box-sizing: border-box;
     display: flex; /* Use flexbox for centering content */
@@ -49,9 +49,16 @@ body {
 }
 
 /* Grid Layouts */
-.meals-grid, .shortcut-grid {
+.meals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); /* Slightly wider minmax */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Slightly wider minmax */
+    gap: 16px; /* Increased gap for more breathing room */
+    margin-bottom: 30px;
+}
+
+.shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Slightly wider minmax */
     gap: 16px; /* Increased gap for more breathing room */
     margin-bottom: 30px;
 }
@@ -101,12 +108,41 @@ body {
     justify-content: center;
     min-height: 60px; /* Ensure consistent height */
     border: 1px solid rgba(0, 123, 255, 0.1); /* Subtle border */
+    position: relative;
 }
 
 .shortcut-card:hover {
     background: #e6f7ff; /* Lighter blue on hover */
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     transform: translateY(-3px);
+}
+
+.shortcut-remove {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: #fff;
+  color: #2196f3;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(33,150,243,0.10);
+  z-index: 2;
+  transition: background 0.15s;
+}
+
+.shortcut-card:hover .shortcut-remove {
+  display: block;
+}
+
+.shortcut-remove:hover {
+  background: #e3f0ff;
+  color: #1565c0;
 }
 
 /* Add Shortcut Button Styles */
@@ -119,7 +155,7 @@ body {
     cursor: pointer;
     padding: 0;
     width: 100%;
-    height: 60px; /* Match shortcut card height */
+    height: 100px; /* Match shortcut card height */
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     align-items: center;
@@ -147,4 +183,73 @@ body {
 
 .no-meal-message p {
     margin: 5px 0;
+}
+
+/* Modal Styles */
+/* 모달 배경 */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(33,150,243,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* 모달 내용 */
+.modal-content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(33,150,243,0.18);
+  padding: 32px 24px 24px 24px;
+  min-width: 260px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-content h3 {
+  color: #2196f3;
+  margin-bottom: 18px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.modal-content input {
+  width: 200px;
+  margin-bottom: 14px;
+  padding: 8px 10px;
+  border: 1px solid #b3e0ff;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.modal-content input:focus {
+  border: 1.5px solid #2196f3;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.modal-btns button {
+  background: linear-gradient(90deg, #b3e0ff 0%, #90caf9 100%);
+  border: none;
+  border-radius: 10px;
+  color: #2196f3;
+  font-weight: 600;
+  padding: 7px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-btns button:hover {
+  background: linear-gradient(90deg, #90caf9 0%, #b3e0ff 100%);
 }

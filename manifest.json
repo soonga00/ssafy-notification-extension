@@ -1,12 +1,30 @@
 {
   "manifest_version": 3,
-  "name": "급식 알림 확장",
-  "version": "1.0",
+  "name": "SSAFY Ring",
+  "description": "싸피 생활을 더 똑똑하게! 입실·퇴실·설문 알림과 급식 정보까지 알려주는 스마트 SSAFY 알림 도우미.",
+  "version": "1.0.0",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["notifications", "alarms", "tabs"]
+  "permissions": ["notifications", "alarms", "tabs", "storage"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "host_permissions": [
+    "https://edu.ssafy.com/*",
+    "https://swexpertacademy.com/*",
+    "https://project.ssafy.com/*"
+  ],
+  "categories": ["productivity"]
 }
