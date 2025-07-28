@@ -70,11 +70,3 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     priority: 2
   });
 });
-
-chrome.notifications.onClicked.addListener((notificationId) => {
-  if (notificationId === 'ssafy-noti') {
-      chrome.tabs.create({ url: 'https://edu.ssafy.com/edu/main/index.do' });
-  } else if (notificationId === 'lunch-noti') {
-      chrome.tabs.create({ url: chrome.runtime.getURL('options.html')  });
-  }
-});
