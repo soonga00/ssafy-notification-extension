@@ -52,40 +52,97 @@ document.addEventListener('DOMContentLoaded', () => {
             { floor: '10F', type: '샐러드🥗', name: '훈제오리 단호박 샐러드,음료' }
         ],
         '2025-08-02': [],
-        '2025-08-03': []
+        '2025-08-03': [],
+        '2025-08-04': [
+            { floor: '20F', type: '한식🍚', name: '해물순두부찌개,흑미밥/쌀밥,돼지고기땅콩강정,후랑크소시지채소볶음,시래기된장조림,깍두기,*아이스티(복숭아맛)*' },
+            { floor: '20F', type: '일품🍚', name: '베이컨미소라멘,유부양념밥,김말이튀김,일식양배추샐러드&드레싱,단무지/김치,바나나,*아이스티(복숭아맛)*' },
+            { floor: '10F', type: '도시락🍱', name: '참치김치찌개,너비아니엿장조림,부추장떡,백미밥,연근조림,깍두기' },
+            { floor: '10F', type: '브런치🥪', name: '새우샌드위치,감자샐러드,딸기드레싱,음료' },
+            { floor: '10F', type: '샐러드🥗', name: '리코타치즈샐러드,딸기드레싱,음료' }
+        ],
+        '2025-08-05': [
+            { floor: '20F', type: '한식🍚', name: '비빔밥,아욱된장국,감자크로켓&케찹,천사채샐러드,무말랭이고추잎무침,김치,*석류차*' },
+            { floor: '20F', type: '일품🍚', name: '소고기마늘종파스타,수제마늘빵,제로탄산,콘치즈구이,샐러드&시저드레싱,피클&할라피뇨,*석류차*' },
+            { floor: '10F', type: '도시락🍱', name: '오삼불고기,어묵채소볶음,콩나물국,백미밥,참나물무침,포기김치' },
+            { floor: '10F', type: '브런치🥪', name: '흑임자닭가슴살샌드위치,파스타샐러드,유자파인드레싱,음료' },
+            { floor: '10F', type: '샐러드🥗', name: '하우스케이준치킨샐러드,유자파인드레싱,음료' }
+        ],
+        '2025-08-06': [
+            { floor: '20F', type: '한식🍚', name: '대파육개장,차조밥/쌀밥,버섯탕수,청포묵김가루무침,건새우마늘종볶음,깍두기,*수정과*' },
+            { floor: '20F', type: '일품🍚', name: '새우필라프&토마토살사소스,유부장국,크림소스떡볶임,건새우마늘종볶음,샐러드&발사믹드레싱,김치,*수정과*' },
+            { floor: '10F', type: '도시락🍱', name: '불닭맛볼카츠,감자채맛살볶음,메밀소바,흑미밥,양배추콘샐러드,포기김치' },
+            { floor: '10F', type: '브런치🥪', name: '에그마요샌드위치,떡갈비샐러드,키위애플드레싱,음료' },
+            { floor: '10F', type: '샐러드🥗', name: '베이컨감자무스샐러드,키위애플드레싱,음료' }
+        ],
+        '2025-08-07': [
+            { floor: '20F', type: '한식🍚', name: '간장돼지불백,혼합잡곡밥/쌀밥,김치수제비,옥수수전,양배추쌈&쌈장,깍두기,*매실차*' },
+            { floor: '20F', type: '일품🍚', name: '간자장면,계란팟국,꽃빵튀김&연유,중국식땅콩볶음,짜사이채무침,김치,*매실차*' },
+            { floor: '10F', type: '도시락🍱', name: '제육볶음,꽈리고추감자조림,얼갈이된장국,백미밥,오이부추무침,포기김치' },
+            { floor: '10F', type: '브런치🥪', name: '햄치즈샌드위치,과일샐러드,발사믹드레싱,음료' },
+            { floor: '10F', type: '샐러드🥗', name: '닭고기콥샐러드,발사믹드레싱,음료' }
+        ],
+        '2025-08-08': [
+            { floor: '20F', type: '한식🍚', name: '밀양돼지국밥,수수밥/쌀밥,장떡,미역줄기게맛살볶음,오이맛고추된장무침,깍두기,*블루베리맛홍초*' },
+            { floor: '20F', type: '일품🍚', name: '고구마돈가스,쌀밥&후리가케,크림스프,감자튀김&케찹,샐러드&오렌지드레싱,푸실리샐러드,피클,*블루베리맛홍초*' },
+            { floor: '10F', type: '도시락🍱', name: '닭살김치찜,미니돈까스,팽이버섯장국,백미밥,명엽채볶음,오이지무침' },
+            { floor: '10F', type: '브런치🥪', name: '치킨텐더샌드위치,단호박샐러드,오리엔탈드레싱,음료' },
+            { floor: '10F', type: '샐러드🥗', name: '우삼겹포케,오리엔탈드레싱,음료' }
+        ],
+        '2025-08-09': [],
+        '2025-08-10': []
         // Add more days as needed
     };
 
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-    const dd = String(today.getDate()).padStart(2, '0');
-    const todayStr = `${yyyy}-${mm}-${dd}`;
+    // 날짜 상태 관리
+    let currentDate = new Date();
 
-    // Get meals for today
-    const meals = weeklyMeals[todayStr] || [];
-
-    const mealsGrid = document.querySelector('.meals-grid');
-    const noMealMessage = document.getElementById('no-meal-message');
-
-    // Clear existing content
-    mealsGrid.innerHTML = '';
-
-    if (meals.length > 0) {
-        // Hide no meal message if there are meals
-        noMealMessage.style.display = 'none';
-        // Populate the meals grid
-        meals.forEach(meal => {
-            const div = document.createElement('div');
-            div.className = 'meal-card';
-            // Replace newline characters with <br> for proper HTML display
-            const formattedName = meal.name.replace(/,/g, '<br>');
-            div.innerHTML = `<strong>${meal.floor} ${meal.type}</strong>${formattedName}`;
-            mealsGrid.appendChild(div);
-        });
-    } else {
-        // Show no meal message if no meals are found for today
-        noMealMessage.style.display = 'block';
+    // 날짜 포맷 함수
+    function formatDate(date) {
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
     }
+
+    // 날짜 라벨 포맷 (예: 2025-08-04 (월))
+    function getDateLabel(date) {
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        return `${formatDate(date)} (${days[date.getDay()]})`;
+    }
+
+    function renderMealsForDate(date) {
+        const dateStr = formatDate(date);
+        const meals = weeklyMeals[dateStr] || [];
+        const mealsGrid = document.querySelector('.meals-grid');
+        const noMealMessage = document.getElementById('no-meal-message');
+        const dateLabel = document.getElementById('meal-date-label');
+        if (dateLabel) dateLabel.textContent = getDateLabel(date);
+
+        mealsGrid.innerHTML = '';
+        if (meals.length > 0) {
+            noMealMessage.style.display = 'none';
+            meals.forEach(meal => {
+                const div = document.createElement('div');
+                div.className = 'meal-card';
+                const formattedName = meal.name.replace(/,/g, '<br>');
+                div.innerHTML = `<strong>${meal.floor} ${meal.type}</strong>${formattedName}`;
+                mealsGrid.appendChild(div);
+            });
+        } else {
+            noMealMessage.style.display = 'block';
+        }
+    }
+
+    // 화살표 버튼 이벤트
+    document.getElementById('prev-meal-day').onclick = () => {
+        currentDate.setDate(currentDate.getDate() - 1);
+        renderMealsForDate(currentDate);
+    };
+    document.getElementById('next-meal-day').onclick = () => {
+        currentDate.setDate(currentDate.getDate() + 1);
+        renderMealsForDate(currentDate);
+    };
+
+    // 최초 렌더링
+    renderMealsForDate(currentDate);
 });

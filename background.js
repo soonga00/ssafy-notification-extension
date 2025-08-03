@@ -18,7 +18,7 @@ chrome.runtime.onInstalled.addListener(() => {
     periodInMinutes: 1440
   });
   chrome.alarms.create('eveningAlarm', {
-    when: getTimeToday(17, 55),
+    when: getTimeToday(17, 59),
     periodInMinutes: 1440
   });
   chrome.alarms.create('surveyAlarm', {
