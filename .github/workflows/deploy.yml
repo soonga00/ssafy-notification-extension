@@ -42,7 +42,7 @@ jobs:
           ls -al "$ZIP_NAME"
 
       - name: Upload & Publish
-        uses: mnao305/chrome-extension-upload@v4 # ← v5 말고 v4 사용
+        uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: extension.zip
           extension-id: ${{ secrets.CWS_EXTENSION_ID }}
