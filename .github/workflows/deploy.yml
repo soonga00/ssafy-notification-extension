@@ -2,7 +2,7 @@ name: Publish to Chrome Web Store
 
 on:
   push:
-    branches: ['deploy']   # deploy 브랜치 푸시 시
+    branches: ["deploy"]
 
 jobs:
   publish:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # (선택) Node 빌드가 없으면 스킵됨
+      # Node 빌드 없으면 자동 스킵
       - name: Setup Node (optional)
         if: hashFiles('package.json') != ''
         uses: actions/setup-node@v4
@@ -25,30 +25,28 @@ jobs:
           npm ci
           npm run build
 
-      # ZIP: manifest.json이 ZIP 루트에 오도록
       - name: Create ZIP
         run: |
           set -e
           ZIP_NAME=extension.zip
-          # 필요한 파일/폴더만 엄밀히 포함
+          # 루트에 있는 필요한 파일만 정확히 포함
           zip -r "$ZIP_NAME" \
             manifest.json \
             background.js \
+            meals.js \
             popup.html \
+            popup.js \
+            style.css \
             icons \
-            _locales \
-            content.js content/ \
-            options.html options/ \
             2>/dev/null || true
           ls -al "$ZIP_NAME"
 
       - name: Upload & Publish
-        uses: mnao305/chrome-extension-upload@v5
+        uses: mnao305/chrome-extension-upload@v4 # ← v5 말고 v4 사용
         with:
           file-path: extension.zip
           extension-id: ${{ secrets.CWS_EXTENSION_ID }}
           client-id: ${{ secrets.CWS_CLIENT_ID }}
           client-secret: ${{ secrets.CWS_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CWS_REFRESH_TOKEN }}
-          # 내부 테스터만 배포하려면 아래 주석 해제
           # publish-target: trustedTesters
