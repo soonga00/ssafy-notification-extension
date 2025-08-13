@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SSAFY Ring",
   "description": "싸피 생활을 더 똑똑하게! 입실·퇴실·설문 알림과 급식 정보까지 알려주는 스마트 SSAFY 알림 도우미.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
