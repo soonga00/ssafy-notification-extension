@@ -12,6 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevBtn = document.getElementById("prev-meal-day");
   const nextBtn = document.getElementById("next-meal-day");
 
+  const showNoMeal = () => {
+    if (noMealMessage) noMealMessage.style.display = "block";
+  };
+  const hideNoMeal = () => {
+    if (noMealMessage) noMealMessage.style.display = "none";
+  };
+
   // util
   const formatDate = (date) => {
     const yyyy = date.getFullYear();
@@ -34,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mealsGrid.innerHTML = "";
     if (meals.length > 0) {
+      hideNoMeal();
       noMealMessage.style.display = "none";
       meals.forEach((meal) => {
         const div = document.createElement("div");
@@ -45,18 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
         mealsGrid.appendChild(div);
       });
     } else {
-      noMealMessage.style.display = "block";
+      showNoMeal;
     }
   }
 
   async function loadMeals() {
-    // 로딩 표시(선택)
-    if (noMealMessage) {
-      noMealMessage.style.display = "block";
-      noMealMessage.textContent = "급식 정보를 불러오는 중...";
-    }
-
-    // 캐시 무력화용 버전 파라미터 (일 단위)
     const v = new Date().toISOString().slice(0, 10);
 
     try {
@@ -72,16 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
       weeklyMeals = data;
       // 로컬 캐시 저장
       localStorage.setItem("mealData", JSON.stringify({ data, ts: Date.now() }));
-    } catch (e) {
-      // 실패 시 로컬 캐시 폴백
+    } catch {
       const cached = localStorage.getItem("mealData");
       if (cached) {
         const { data } = JSON.parse(cached);
         weeklyMeals = data || {};
-        if (noMealMessage) noMealMessage.textContent = "네트워크 오류로 캐시 데이터를 표시합니다.";
       } else {
         weeklyMeals = {};
-        if (noMealMessage) noMealMessage.textContent = "급식 정보를 불러오지 못했습니다.";
       }
     } finally {
       renderMealsForDate(currentDate);
