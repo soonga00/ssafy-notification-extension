@@ -49,11 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const formattedName = String(meal.name || "")
           .replace(/,/g, "<br>") // 쉼표 기준 줄바꿈(기존 로직 유지)
           .replace(/\n/g, "<br>"); // 개행도 줄바꿈 처리
-        div.innerHTML = `<strong>${meal.floor} ${meal.type}</strong><br>${formattedName}`;
+        div.innerHTML = `<strong>${meal.floor} ${meal.type}</strong>${formattedName}`;
         mealsGrid.appendChild(div);
       });
     } else {
-      showNoMeal;
+      showNoMeal();
     }
   }
 
