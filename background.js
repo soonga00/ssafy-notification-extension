@@ -1,3 +1,20 @@
+// 다음에 알람이 울릴 평일 시간을 계산하는 함수
+function getNextWeekdayTime(hour, minute) {
+  const now = new Date();
+  let target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
+
+  if (target.getTime() < now.getTime()) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  // 다음 날짜가 주말(토:6, 일:0)이면 평일이 될 때까지 1일씩 추가
+  while (target.getDay() === 0 || target.getDay() === 6) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  return target.getTime();
+}
+
 function getTimeToday(hour, minute) {
   const now = new Date();
   const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
@@ -10,15 +27,15 @@ function getTimeToday(hour, minute) {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create('morningAlarm', {
-    when: getTimeToday(8, 30),
+    when: getNextWeekdayTime(8, 30),
     periodInMinutes: 1440
   });
   chrome.alarms.create('lunchAlarm', {
-    when: getTimeToday(12, 0),
+    when: getNextWeekdayTime(12, 0),
     periodInMinutes: 1440
   });
   chrome.alarms.create('eveningAlarm', {
-    when: getTimeToday(17, 59),
+    when: getNextWeekdayTime(17, 59),
     periodInMinutes: 1440
   });
   chrome.alarms.create('surveyAlarm', {
