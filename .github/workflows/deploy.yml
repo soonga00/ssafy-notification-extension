@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env: # 👈 여기 붙이기
+    env:
       ACTIONS_STEP_DEBUG: true
       ACTIONS_RUNNER_DEBUG: true
 
@@ -15,7 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Node 빌드 없으면 자동 스킵
       - name: Setup Node (optional)
         if: hashFiles('package.json') != ''
         uses: actions/setup-node@v4
@@ -32,7 +31,6 @@ jobs:
         run: |
           set -e
           ZIP_NAME=extension.zip
-          # 루트에 있는 필요한 파일만 정확히 포함
           zip -r "$ZIP_NAME" \
             manifest.json \
             background.js \
@@ -44,7 +42,38 @@ jobs:
             2>/dev/null || true
           ls -al "$ZIP_NAME"
 
-      - name: Upload & Publish
+      - name: Validate package before upload
+        run: |
+          set -e
+          unzip -l extension.zip
+          sudo apt-get update -y && sudo apt-get install -y jq
+          cat manifest.json | jq '. | {manifest_version, name, version, background, action, icons}'
+          VER=$(jq -r '.version // empty' manifest.json)
+          if [ -z "$VER" ]; then
+            echo "::error::manifest.json 의 version이 비어 있습니다."; exit 1
+          fi
+          if ! [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "::warning::버전 형식이 비표준일 수 있습니다: $VER"
+          fi
+
+      - name: Preflight CWS credentials
+        env:
+          CWS_EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: |
+          set -e
+          for k in CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN; do
+            v="${!k}"
+            if [ -z "$v" ]; then
+              echo "::error::$k 시크릿이 비어 있습니다."; exit 1
+            else
+              echo "::notice::$k OK"
+            fi
+          done
+
+      - name: Upload (no publish for debug)
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: extension.zip
@@ -52,4 +81,4 @@ jobs:
           client-id: ${{ secrets.CWS_CLIENT_ID }}
           client-secret: ${{ secrets.CWS_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CWS_REFRESH_TOKEN }}
-          # publish-target: trustedTesters
+          publish: false
