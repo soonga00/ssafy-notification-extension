@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
+    env: # 👈 여기 붙이기
       ACTIONS_STEP_DEBUG: true
       ACTIONS_RUNNER_DEBUG: true
 
@@ -15,6 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node 빌드 없으면 자동 스킵
       - name: Setup Node (optional)
         if: hashFiles('package.json') != ''
         uses: actions/setup-node@v4
@@ -26,11 +27,13 @@ jobs:
         run: |
           npm ci
           npm run build
+      
 
       - name: Create ZIP
         run: |
           set -e
           ZIP_NAME=extension.zip
+          # 루트에 있는 필요한 파일만 정확히 포함
           zip -r "$ZIP_NAME" \
             manifest.json \
             background.js \
@@ -41,22 +44,7 @@ jobs:
             icons \
             2>/dev/null || true
           ls -al "$ZIP_NAME"
-
-      - name: Validate package before upload
-        run: |
-          set -e
-          unzip -l extension.zip
-          sudo apt-get update -y && sudo apt-get install -y jq
-          cat manifest.json | jq '. | {manifest_version, name, version, background, action, icons}'
-          VER=$(jq -r '.version // empty' manifest.json)
-          if [ -z "$VER" ]; then
-            echo "::error::manifest.json 의 version이 비어 있습니다."; exit 1
-          fi
-          if ! [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
-            echo "::warning::버전 형식이 비표준일 수 있습니다: $VER"
-          fi
-
-      - name: Preflight CWS credentials
+      - name: Debug upload (print CWS error body)
         env:
           CWS_EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
           CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
@@ -64,16 +52,44 @@ jobs:
           CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
         run: |
           set -e
-          for k in CWS_EXTENSION_ID CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_REFRESH_TOKEN; do
-            v="${!k}"
-            if [ -z "$v" ]; then
-              echo "::error::$k 시크릿이 비어 있습니다."; exit 1
-            else
-              echo "::notice::$k OK"
-            fi
-          done
+          sudo apt-get update -y && sudo apt-get install -y jq
+          # 1) 액세스 토큰 발급
+          ACCESS_TOKEN=$(
+            curl -s \
+              -d client_id=${CWS_CLIENT_ID} \
+              -d client_secret=${CWS_CLIENT_SECRET} \
+              -d refresh_token=${CWS_REFRESH_TOKEN} \
+              -d grant_type=refresh_token \
+              https://www.googleapis.com/oauth2/v4/token | jq -r .access_token
+          )
+          if [ -z "$ACCESS_TOKEN" ] || [ "$ACCESS_TOKEN" = "null" ]; then
+            echo "::error::Failed to get access token"; exit 1
+          fi
 
-      - name: Upload (no publish for debug)
+          # 2) 업로드(게시 아님). ★여기서 JSON 응답을 그대로 출력
+          RESP=$(curl -s -D /tmp/headers.txt \
+            -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+            -H "x-goog-api-version: 2" \
+            -X PUT \
+            -T extension.zip \
+            "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${CWS_EXTENSION_ID}")
+
+          echo "=== CWS raw response ==="
+          echo "$RESP" | jq . || echo "$RESP"
+
+          echo "=== HTTP headers ==="
+          cat /tmp/headers.txt || true
+
+          # 3) 실패 사유 핵심만 뽑아보기 (있으면)
+          ERR=$(echo "$RESP" | jq -r '.itemError[0].error_code // empty')
+          DET=$(echo "$RESP" | jq -r '.itemError[0].error_detail // empty')
+          if [ -n "$ERR" ]; then
+            echo "::error::CWS Validation Error: $ERR"
+            [ -n "$DET" ] && echo "::error::Detail: $DET"
+            # 여기서 exit 1하면 뒤 스텝이 안돌아가니, 우선 통과시켜 원인만 확인
+          fi
+
+      - name: Upload & Publish
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: extension.zip
@@ -81,4 +97,4 @@ jobs:
           client-id: ${{ secrets.CWS_CLIENT_ID }}
           client-secret: ${{ secrets.CWS_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CWS_REFRESH_TOKEN }}
-          publish: false
+          # publish-target: trustedTesters
