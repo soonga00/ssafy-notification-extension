@@ -26,21 +26,21 @@ function getTimeToday(hour, minute) {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create('morningAlarm', {
-    when: getNextWeekdayTime(8, 30),
-    periodInMinutes: 1440
-  });
-  chrome.alarms.create('lunchAlarm', {
-    when: getNextWeekdayTime(12, 0),
-    periodInMinutes: 1440
-  });
-  chrome.alarms.create('eveningAlarm', {
-    when: getNextWeekdayTime(17, 59),
-    periodInMinutes: 1440
-  });
-  chrome.alarms.create('surveyAlarm', {
-    when: getTimeToday(16, 0), // 금요일 오후 4시
-    periodInMinutes: 10080 // 1주일
+  // 기존 알람을 모두 지우고 새로 설정 -> 중복 방지
+  chrome.alarms.clearAll(() => {
+    chrome.alarms.create('morningAlarm', {
+      when: getNextWeekdayTime(8, 30)
+    });
+    chrome.alarms.create('lunchAlarm', {
+      when: getNextWeekdayTime(12, 0)
+    });
+    chrome.alarms.create('eveningAlarm', {
+      when: getNextWeekdayTime(17, 59)
+    });
+    chrome.alarms.create('surveyAlarm', { // 금요일 오후 4시 주간 알람
+      when: getTimeToday(16, 0),
+      periodInMinutes: 10080 // 1주일
+    });
   });
 });
 
@@ -51,33 +51,34 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   let notificationId = '';
 
   if (alarm.name === 'morningAlarm') {
+    chrome.alarms.create('morningAlarm', { when: getNextWeekdayTime(8, 30) });
     title = '🌞 입실 시간이에요!';
     message = '오늘 하루도 화이팅!! 지금 바로 입실 체크 꾹!';
     iconUrl = 'icons/morning.png';
     notificationId = 'ssafy-noti';
+  } else if (alarm.name === 'lunchAlarm') {
+    chrome.alarms.create('morningAlarm', { when: getNextWeekdayTime(12, 0) });
+    title = '📢 와~~ 점심시간이다!';
+    message = '오늘 뭐 먹지? 급식 메뉴 확인하러 가자 🍱';
+    iconUrl = 'icons/lunch.png';
+    notificationId = 'lunch-noti';
   } else if (alarm.name === 'eveningAlarm') {
+    chrome.alarms.create('morningAlarm', { when: getNextWeekdayTime(17, 59) });
     title = '🌙 퇴실도 잊지 마세요~';
     message = '오늘 하루도 수고 많았어요 :) 퇴실 체크하고 퇴근 완료!';
     iconUrl = 'icons/evening.png';
     notificationId = 'ssafy-noti';
   } else if (alarm.name === 'surveyAlarm') {
-    // 오늘이 금요일인지 확인
     const today = new Date();
-    if (today.getDay() === 5) { // 0:일 ~ 5:금 ~ 6:토
+    if (today.getDay() === 5) { // 오늘이 금요일인지 확인 (0:일 ~ 5:금 ~ 6:토)
       title = '📋 주간 설문 찬스!';
       message = '벌써 주말? 설문 하나만 딱 하고 쉬어요~ 😎';
       iconUrl = 'icons/survey.png';
       notificationId = 'ssafy-noti';
     } else {
-      // 금요일이 아니면 알림을 띄우지 않음
-      return;
+      return;  // 금요일이 아니면 알림을 띄우지 않음
     }
-  } else {
-    title = '📢 와~~ 점심시간이다!';
-    message = '오늘 뭐 먹지? 급식 메뉴 확인하러 가자 🍱';
-    iconUrl = 'icons/lunch.png';
-    notificationId = 'lunch-noti';
-  }
+  } 
 
   chrome.notifications.create(notificationId, {
     type: 'basic',
