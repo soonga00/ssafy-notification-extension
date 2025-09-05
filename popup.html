@@ -1,66 +1,81 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSAFFY 급식 & 바로가기</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="meals.js"></script>
-    <script src="popup.js"></script>
-    <!-- Inter font for a clean, modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSAFFY 급식 & 바로가기</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="meals.js"></script>
+  <script src="popup.js"></script>
+  <!-- Inter font for a clean, modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <section class="shortcut-section">
-            <header class="header">
-            <h1>🔗 바로 가기</h1>
-        </header>
-                        <!-- ...existing code... -->
-            <div class="shortcut-grid">
-            <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">Edu SSAFY</a>
-            <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">SWEA</a>
-            <a href="https://project.ssafy.com/home" target="_blank" class="shortcut-card">SSAFY Git</a>
-            <div id="shortcut-form" style="display:none; margin-top:10px;">
-                <input type="text" id="shortcut-title" placeholder="이름" style="width:40%;" />
-                <input type="url" id="shortcut-url" placeholder="링크" style="width:50%;" />
-                <button id="add-shortcut-btn">추가</button>
-            </div>
-            <!-- + 버튼은 JS에서 동적으로 추가됨 -->
-            </div>
-            <div id="shortcut-modal" class="modal" style="display:none;">
-<div class="modal-content">
-    <h3>바로가기 추가</h3>
-    <input type="text" id="modal-shortcut-title" placeholder="이름" />
-    <input type="url" id="modal-shortcut-url" placeholder="링크" />
-        <div class="modal-btns">
+  <div class="container">
+
+    <!-- 바로가기 -->
+    <section class="shortcut-section">
+      <header class="header">
+        <h1>🔗 바로 가기</h1>
+      </header>
+      <div class="shortcut-grid">
+        <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">Edu SSAFY</a>
+        <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">SWEA</a>
+        <a href="https://project.ssafy.com/home" target="_blank" class="shortcut-card">SSAFY Git</a>
+        <div id="shortcut-form" class="shortcut-form">
+          <input type="text" id="shortcut-title" placeholder="이름" />
+          <input type="url" id="shortcut-url" placeholder="링크" />
+          <button id="add-shortcut-btn">추가</button>
+        </div>
+      </div>
+      <div id="shortcut-modal" class="modal">
+        <div class="modal-content">
+          <h3>바로가기 추가</h3>
+          <input type="text" id="modal-shortcut-title" placeholder="이름" />
+          <input type="url" id="modal-shortcut-url" placeholder="링크" />
+          <div class="modal-btns">
             <button id="modal-add-btn">추가</button>
             <button id="modal-cancel-btn">취소</button>
+          </div>
         </div>
-    </div>
-</div>
-            <!-- ...existing code... -->
-        </section>
-        <header class="header">
-            <h1>🍽️ 오늘의 급식 🍽️</h1>
-            <div id="meal-date-nav" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;">
-                <button id="prev-meal-day" style="font-size:1.2em;">⬅️</button>
-                <span id="meal-date-label" style="min-width:100px;text-align:center;"></span>
-                <button id="next-meal-day" style="font-size:1.2em;">➡️</button>
-            </div>
-        </header>
+      </div>
+    </section>
 
-        <section class="meals-section">
-            <div class="meals-grid">
-                <!-- meals.js에서 오늘 메뉴가 동적으로 추가됨 -->
-            </div>
-            <div id="no-meal-message" class="no-meal-message" style="display: none;">
-                <p>오늘은 급식 정보가 없습니다.</p>
-                <p>즐거운 하루 되세요!</p>
-            </div>
-        </section>
+    <!-- 오늘의 급식 -->
+    <header class="header">
+      <h1>🍽️ 오늘의 급식 🍽️</h1>
+      <div id="meal-date-nav" class="meal-date-nav">
+        <button id="prev-meal-day">⬅️</button>
+        <span id="meal-date-label"></span>
+        <button id="next-meal-day">➡️</button>
+      </div>
+    </header>
 
-        
+    <section class="meals-section">
+      <div class="meals-grid">
+        <!-- meals.js에서 오늘 메뉴가 동적으로 추가됨 -->
+      </div>
+      <div id="no-meal-message" class="no-meal-message">
+        <p>오늘은 급식 정보가 없습니다.</p>
+        <p>즐거운 하루 되세요!</p>
+      </div>
+    </section>
+
+    <!-- 알람 스위칭 -->
+    <div class="alarm-wrapper">
+      <label class="alarm-label">
+        <span class="alarm-icon">📅</span>
+        <span class="alarm-text">출석 알림</span>
+        <input type="checkbox" id="alarm-toggle" hidden>
+        <span id="alarm-switch">
+          <span class="switch-circle"></span>
+        </span>
+      </label>
     </div>
+
+  </div>
 </body>
+
 </html>

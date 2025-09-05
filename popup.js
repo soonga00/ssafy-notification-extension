@@ -1,3 +1,6 @@
+// ==========================
+// Shortcut 관련
+// ==========================
 function showShortcutForm() {
   document.getElementById('shortcut-modal').style.display = 'flex';
   document.getElementById('modal-shortcut-title').value = '';
@@ -27,17 +30,24 @@ function addShortcutFromModal() {
 function renderShortcuts() {
   chrome.storage.local.get({ shortcuts: [] }, (data) => {
     const grid = document.querySelector('.shortcut-grid');
-    // 기본 3개는 유지, 이후 사용자 추가
-    grid.innerHTML = `
-      <a href="https://edu.ssafy.com/" target="_blank" class="shortcut-card">Edu SSAFY</a>
-      <a href="https://swexpertacademy.com/main/main.do" target="_blank" class="shortcut-card">SWEA</a>
-      <a href="https://project.ssafy.com/home" target="_blank" class="shortcut-card">SSAFY Git</a>
-      <div id="shortcut-form" style="display:none; margin-top:10px;">
-        <input type="text" id="shortcut-title" placeholder="이름" style="width:40%;" />
-        <input type="url" id="shortcut-url" placeholder="링크" style="width:50%;" />
-        <button id="add-shortcut-btn">추가</button>
-      </div>
-    `;
+    grid.innerHTML = ''; // shortcut 영역만 초기화
+
+    // 기본 3개
+    const defaults = [
+      { title: 'Edu SSAFY', url: 'https://edu.ssafy.com/' },
+      { title: 'SWEA', url: 'https://swexpertacademy.com/main/main.do' },
+      { title: 'SSAFY Git', url: 'https://project.ssafy.com/home' }
+    ];
+    defaults.forEach(sc => {
+      const a = document.createElement('a');
+      a.href = sc.url;
+      a.target = '_blank';
+      a.className = 'shortcut-card';
+      a.textContent = sc.title;
+      grid.appendChild(a);
+    });
+
+    // 사용자 저장된 바로가기
     data.shortcuts.forEach((sc, idx) => {
       const a = document.createElement('a');
       a.href = sc.url;
@@ -45,7 +55,7 @@ function renderShortcuts() {
       a.className = 'shortcut-card';
       a.textContent = sc.title;
 
-      // x 버튼 생성
+      // 삭제 버튼
       const removeBtn = document.createElement('button');
       removeBtn.className = 'shortcut-remove';
       removeBtn.type = 'button';
@@ -59,12 +69,13 @@ function renderShortcuts() {
       a.appendChild(removeBtn);
       grid.appendChild(a);
     });
-    // +버튼 다시 추가
+
+    // + 버튼
     const btn = document.createElement('button');
     btn.className = 'add-shortcut';
     btn.textContent = '+';
     btn.type = 'button';
-    btn.onclick = showShortcutForm;
+    btn.onclick = showShortcutForm; // ✅ 여기서만 모달 띄우기
     grid.appendChild(btn);
   });
 }
@@ -77,6 +88,9 @@ function removeShortcut(idx) {
   });
 }
 
+// ==========================
+// Init
+// ==========================
 document.addEventListener('DOMContentLoaded', () => {
   renderShortcuts();
 
@@ -84,15 +98,45 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('modal-add-btn').addEventListener('click', addShortcutFromModal);
   document.getElementById('modal-cancel-btn').addEventListener('click', hideShortcutForm);
 
-  // 엔터로도 추가 가능
+  // 엔터 입력으로 추가
   document.getElementById('modal-shortcut-url').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') addShortcutFromModal();
   });
 
-  // + 버튼 및 기타 이벤트
-  document.body.addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('add-shortcut')) {
-      showShortcutForm();
-    }
+  // ==========================
+  // 알람 토글
+  // ==========================
+  const alarmToggle = document.getElementById('alarm-toggle');
+  const alarmSwitch = document.getElementById('alarm-switch');
+  const circle = alarmSwitch?.querySelector('.switch-circle');
+  if (!alarmToggle || !alarmSwitch || !circle) return; // 방어
+
+  function updateSwitchUI(checked) {
+    alarmSwitch.style.background = checked ? '#2563eb' : '#e5e7eb';
+    circle.style.left = checked ? '24px' : '3px';
+  }
+
+  // 초기 상태 로드
+  chrome.storage.local.get({ alarmEnabled: true }, (data) => {
+    const enabled = !!data.alarmEnabled;
+    alarmToggle.checked = enabled;
+    updateSwitchUI(enabled);
+  });
+
+  // 클릭 시 토글
+  alarmSwitch.addEventListener('click', (e) => {
+    e.preventDefault();
+    const next = !alarmToggle.checked;
+    alarmToggle.checked = next;
+    updateSwitchUI(next);
+    chrome.storage.local.set({ alarmEnabled: next });
+    chrome.runtime.sendMessage({ type: 'alarm-toggle', enabled: next });
+  });
+
+  // 외부에서 변경 시도도 반영
+  alarmToggle.addEventListener('change', function () {
+    updateSwitchUI(this.checked);
+    chrome.storage.local.set({ alarmEnabled: this.checked });
+    chrome.runtime.sendMessage({ type: 'alarm-toggle', enabled: this.checked });
   });
 });

@@ -188,10 +188,10 @@ body {
 /* Modal Styles */
 /* 모달 배경 */
 .modal {
+  display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(33,150,243,0.15);
-  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
@@ -276,4 +276,78 @@ body {
   border-color: #bdbdbd;
   color: #1976d2;
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+/* Meal Date Navigation */
+.meal-date-nav {
+  display: flex;              /* 가로 배치 */
+  align-items: center;        /* 버튼/텍스트 세로 가운데 정렬 */
+  justify-content: center;    /* 전체 가운데 정렬 */
+  gap: 10px;                  /* 버튼/날짜 간격 */
+  margin-top: 8px;
+}
+
+#meal-date-label {
+  min-width: 100px;           /* 날짜는 일정 너비 */
+  text-align: center;
+}
+
+/* === Alarm Switch === */
+.alarm-wrapper {
+  margin:20px 0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+.alarm-label {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.alarm-icon {
+  font-size:1.3em;
+}
+
+.alarm-text {
+  font-weight:700;
+  font-size:1.2em;
+}
+
+#alarm-switch {
+  display:inline-block;
+  width:52px;
+  height:30px;
+  background:#e5e7eb;
+  border-radius:15px;
+  position:relative;
+  transition:background 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#alarm-switch:hover {
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.15), 0 0 4px rgba(37,99,235,0.3);
+}
+
+.switch-circle {
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:24px;
+  height:24px;
+  background:white;
+  border-radius:50%;
+  transition: all 0.3s ease;
+  box-shadow:0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 켜졌을 때 스타일 */
+#alarm-toggle:checked + #alarm-switch {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+#alarm-toggle:checked + #alarm-switch .switch-circle {
+  left:25px;
 }
