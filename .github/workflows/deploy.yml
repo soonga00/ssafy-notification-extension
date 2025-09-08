@@ -89,7 +89,7 @@ jobs:
           client-id: ${{ secrets.CWS_CLIENT_ID }}
           client-secret: ${{ secrets.CWS_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CWS_REFRESH_TOKEN }}
-          file-name: extension.zip
+          file-path: extension.zip
           publish: true
           # 필요 시 테스트 채널만 배포:
           # publish-target: trustedTesters
